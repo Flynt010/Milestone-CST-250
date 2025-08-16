@@ -35,23 +35,27 @@
                 }
             }
 
+            // Set up your bombs, rewards, and bomb neighbors
             SetupBombs();
             SetupRewards();
             CalculateNumberOfBombNeighbors();
             StartTime = DateTime.Now;
         }
 
+        // I can't remember what this was for but it was in the tutorial
+        // So i ain't touching it
         public void UseSpecialBonus()
         {
 
         }
 
+        // We don't care about score yet
         public int DetermineFinalScore()
         {
             return 0;
         }
 
-        private bool IsCellOnBoard(int row, int col)
+        public bool IsCellOnBoard(int row, int col)
         {
             return row >= 0 && row < Size && col >= 0 && col < Size;
         }
@@ -98,7 +102,10 @@
         {
             int totalCells = Size * Size;
             int bombCount = (int)(totalCells * Difficulty);
+            // So say you had 0.15 difficulty, its just 15% of the tiles
+            // Are bombs
 
+            // Just put the bombs in the bag bro
             int bombsPlaced = 0;
             while (bombsPlaced < bombCount)
             {
@@ -115,13 +122,77 @@
 
         private void SetupRewards()
         {
-            RewardsRemaining = 0;
+            // How many rewards it can place on the board
+            // Self explanatory
+            int rewardsToPlace = 1;
+            RewardsRemaining = rewardsToPlace;
+
+            while (rewardsToPlace > 0)
+            {
+                int row = random.Next(Size);
+                int col = random.Next(Size);
+
+                if (!Cells[row, col].IsBomb && !Cells[row, col].HasSpecialReward)
+                {
+                    Cells[row, col].HasSpecialReward = true;
+                    rewardsToPlace--;
+                }
+            }
         }
 
         public GameStatus DetermineGameState()
         {
+            bool allNonBombsRevealed = true;
+
+            for (int r = 0; r < Size; r++)
+            {
+                for (int c = 0; c < Size; c++)
+                {
+                    Cell cell = Cells[r, c];
+
+                    // You hit a bomb
+                    // Stupid
+                    if (cell.IsVisited && cell.IsBomb)
+                        return GameStatus.Lost;
+
+                    if (!cell.IsBomb && !cell.IsVisited)
+                        allNonBombsRevealed = false;
+                }
+            }
+
+            // You didn't hit a bomb
+            // Hoorah
+            if (allNonBombsRevealed)
+                return GameStatus.Won;
+
+            // You still have spots to mark
+            // Stupid
             return GameStatus.InProgress;
         }
 
+        public void RevealAdjacentZeros(int row, int col)
+        {
+            // Safety checks
+            if (!IsCellOnBoard(row, col)) return;
+
+            Cell cell = Cells[row, col];
+
+            if (cell.IsVisited || cell.IsBomb || cell.IsFlagged) return;
+
+            cell.IsVisited = true;
+
+            // If this cell has neighbors with bombs, stop here
+            if (cell.NumberOfBombNeighbors > 0) return;
+
+            // Otherwise, visit all surrounding cells
+            for (int dr = -1; dr <= 1; dr++)
+            {
+                for (int dc = -1; dc <= 1; dc++)
+                {
+                    if (dr == 0 && dc == 0) continue; // Skip self
+                    RevealAdjacentZeros(row + dr, col + dc);
+                }
+            }
+        }
     }
 }
