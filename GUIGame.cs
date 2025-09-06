@@ -86,6 +86,8 @@ namespace MineSweeperGUI
 
             scoreTimer.Stop();
             MessageBox.Show("Game Over! You hit a bomb.");
+
+            EndGame(CalculateScore());
         }
 
         private void btnRestart_Click(object sender, EventArgs e)
@@ -108,6 +110,8 @@ namespace MineSweeperGUI
             {
                 scoreTimer.Stop();
                 MessageBox.Show($"You Win! Score: {CalculateScore()}");
+
+                EndGame(CalculateScore());
             }
         }
 
@@ -259,6 +263,19 @@ namespace MineSweeperGUI
             else
             {
                 MessageBox.Show("No rewards available!");
+            }
+        }
+
+        private void EndGame(int finalScore)
+        {
+            scoreTimer.Stop();
+            TimeSpan gameTime = DateTime.Now - board.StartTime;
+
+            GUIName nameForm = new GUIName();
+            if (nameForm.ShowDialog() == DialogResult.OK)
+            {
+                GUIScore scoreForm = new GUIScore(nameForm.PlayerName, finalScore, gameTime);
+                scoreForm.ShowDialog();
             }
         }
     }

@@ -19,3 +19,5 @@ C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\refin
 C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\MineSweeperGUI.pdb
 C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\MineSweeperGUI.genruntimeconfig.cache
 C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\ref\MineSweeperGUI.dll
+C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\MineSweeperGUI.GUIName.resources
+C:\Users\Brandon Lowe\source\repos\MineSweeperGUI\obj\Debug\net8.0-windows\MineSweeperGUI.GUIScore.resources
